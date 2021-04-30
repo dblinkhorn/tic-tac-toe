@@ -5,28 +5,26 @@ gridSquares.forEach( function (square) {
   // will detect a user click and
   square.addEventListener("click", function () {
     // if clicked, runs handlePlayerMove function
-    updateGameBoardArray(square.id)
+    updateGameBoard(square.id)
   });
 
 
-const gameBoard = (playerMove) => {
+const gameBoard = () => {
   var gameBoardArray = ["X", "X", "O",
                         "O", "O", "X",
                         "X", "O", "O"];
 
-  var playerMove = document.getElementById("")
-
-  const updateGameBoardArray = (playerMove) => {
+  const updateGameBoard = (playerMove) => {
 
     // use clicked div to display player's mark and update the gameBoardArray with that div's id
+    var clickedSquare = document.getElementById(playerMove);
+    gameBoardArray[clickedSquare] = "X";
 
     // remove event listener from the clicked div
 
   }
 
-  const updateGameBoardDiv = (playerMove)
-
-  return { gameBoardArray, handlePlayerMove }
+  return { updateGameBoard }
 }
 
   // function to handle player move
@@ -35,3 +33,7 @@ const gameBoard = (playerMove) => {
 
 // player object
   // player name
+
+
+
+  // ai player will go here
