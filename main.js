@@ -1,3 +1,4 @@
+// main game function
 const gameBoard = () => {
 
   // array to store the gameboard
@@ -14,22 +15,23 @@ const gameBoard = () => {
     });
   });
 
-  // let gameBoardDiv = document.getElementById("gameboard");
-  // const playAgain = function() { location.reload() };
-  // gameBoardDiv.classList = "play-again";
-  // gameBoardDiv.textContent = "Play again?";
-  // gameBoardDiv.addEventListener("click", function() {
-  //   playAgain;
-  // });
-
+  // boolean that toggles to track whose turn it is
   var markToggle = true;
+  // defines the mark of each player, X goes first
   var playerMark = "X";
+  // stores the annoucements div
+  const announceDiv = document.getElementById("announce-h3");
 
+  // alternates player's turn as turns are taken
   const _playerToggle = () => {
+    // if markToggle is true...
     if (markToggle) {
+      announceDiv.textContent ="Player O's turn";
       playerMark = "X";
       markToggle = false;
+      // ...and if it's false
     } else {
+      announceDiv.textContent ="Player X's turn";
       playerMark = "O";
       markToggle = true;
     }
@@ -37,34 +39,66 @@ const gameBoard = () => {
 
   // function to handle a player's move
   const _updateGameBoard = (playerMove) => {
+
+    // checks each grid square for clicked class, and if so break out of function
+    // prevents a player from clicking the same square more than once
     if (_gridSquares.item(playerMove).classList.contains("clicked")) {
       return;
     }
 
+    // checks to see if the game has already ended
+    // and if so
+    if (gameOver === true) {
+      // break out of function...no more moves handled
+      return;
+    }
+
+    // run player toggle to switch whose turn it next round
     _playerToggle();
 
+    // place the player's mark in the clicked position of the gameboard array
     _gameBoardArray[Number(playerMove)] = playerMark;
+    // change the grid square on the page to show the mark
     _gridSquares.item(playerMove).textContent = playerMark;
+    // add the clicked class so clicking it again will have no effect
     _gridSquares.item(playerMove).classList.add("clicked");
+    // check the array to see if there is a winner or draw
     _checkForWin(_gameBoardArray);
   }
 
+  // booloean to track whether game has a winner or draw
+  let gameOver = false;
+  // stores the div where the play again message will appear if there is a winner or draw
+  // this div starts out hidden until gameOver is set to true (someone has won or draw)
+  let playAgainDiv = document.getElementById("play-again");
+  // add a listener to detect a click
+  playAgainDiv.addEventListener("click", () => {
+    // and if so, refresh the page
+    location.reload();
+  })
+
+  // announces a winner or draw
   const _declareWinner = (winner) => {
-    let titleDiv = document.getElementById("title-h1");
 
     if (winner === "X") {
-      titleDiv.textContent = "X wins the game!";
+      announceDiv.textContent = "Player X wins the game!";
     }
     if (winner === "O") {
-      titleDiv.textContent = "O wins the game!"
+      announceDiv.textContent = "Player O wins the game!"
     }
     if (winner === "tie") {
-      titleDiv.textContent = "It's a tie!"
+      announceDiv.textContent = "It's a tie!"
     }
+    // when a winner/draw has been delcared, un-hide the play again div
+    playAgainDiv.classList.remove("hidden");
+    // set gameOver to true
+    gameOver = true;
   }
 
+  // used each round to check the gameboard array to see if a win/draw condition has been met
   const _checkForWin = (_gameBoardArray) => {
 
+    // if there are no positions still empty, declare game a tie
     if (!_gameBoardArray.includes("")) {
       _declareWinner("tie");
     }
@@ -171,15 +205,7 @@ const gameBoard = () => {
       _gameBoardArray[6] === "O"
     ) { _declareWinner("O"); return; };
   }
-  return { _gameBoardArray, playAgain };
 }
 
 // instantiate main game object (gameBoard) to access its public variables and functions
 let game = gameBoard();
-
-// player object
-  // player name
-
-
-
-  // ai player will go here
