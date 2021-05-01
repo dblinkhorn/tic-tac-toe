@@ -1,11 +1,7 @@
 const gameBoard = () => {
-  // var _gameBoardArray = [
-  //   "X", "X", "O",
-  //   "O", "O", "X",
-  //   "X", "O", "O"
-  // ];
 
-  var _gameBoardArray = Array(9).fill("none");
+  // array to store the gameboard
+  var _gameBoardArray = Array(9).fill("");
 
   // stores all game board grid squares
   let _gridSquares = document.querySelectorAll(".square");
@@ -18,26 +14,49 @@ const gameBoard = () => {
     });
   });
 
+  // let gameBoardDiv = document.getElementById("gameboard");
+  // const playAgain = function() { location.reload() };
+  // gameBoardDiv.classList = "play-again";
+  // gameBoardDiv.textContent = "Play again?";
+  // gameBoardDiv.addEventListener("click", function() {
+  //   playAgain;
+  // });
+
+  var markToggle = true;
+  var playerMark = "X";
+
+  const _playerToggle = () => {
+    if (markToggle) {
+      playerMark = "X";
+      markToggle = false;
+    } else {
+      playerMark = "O";
+      markToggle = true;
+    }
+  }
+
   // function to handle a player's move
   const _updateGameBoard = (playerMove) => {
     if (_gridSquares.item(playerMove).classList.contains("clicked")) {
-      console.log("already clicked");
       return;
     }
-    _gameBoardArray[Number(playerMove)] = "X";
-    _gridSquares.item(playerMove).textContent = "X";
+
+    _playerToggle();
+
+    _gameBoardArray[Number(playerMove)] = playerMark;
+    _gridSquares.item(playerMove).textContent = playerMark;
     _gridSquares.item(playerMove).classList.add("clicked");
     _checkForWin(_gameBoardArray);
   }
 
   const _declareWinner = (winner) => {
-    let titleDiv = document.getElementById("title");
+    let titleDiv = document.getElementById("title-h1");
 
     if (winner === "X") {
-      titleDiv.textContent = "X wins the game!"
+      titleDiv.textContent = "X wins the game!";
     }
     if (winner === "O") {
-      titleDiv.textContent = "X wins the game!"
+      titleDiv.textContent = "O wins the game!"
     }
     if (winner === "tie") {
       titleDiv.textContent = "It's a tie!"
@@ -45,6 +64,10 @@ const gameBoard = () => {
   }
 
   const _checkForWin = (_gameBoardArray) => {
+
+    if (!_gameBoardArray.includes("")) {
+      _declareWinner("tie");
+    }
 
     // horizontal wins
 
@@ -148,6 +171,7 @@ const gameBoard = () => {
       _gameBoardArray[6] === "O"
     ) { _declareWinner("O"); return; };
   }
+  return { _gameBoardArray, playAgain };
 }
 
 // instantiate main game object (gameBoard) to access its public variables and functions
